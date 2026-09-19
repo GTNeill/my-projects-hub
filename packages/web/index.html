@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta
+			name="description"
+			content="Projects built by George Neill — apps, tools and sites, with live links."
+		/>
+		<meta property="og:title" content="My Projects — tech.gneill.net" />
+		<meta
+			property="og:description"
+			content="Projects built by George Neill — apps, tools and sites, with live links."
+		/>
+		<meta property="og:image" content="/og-image.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<title>My Projects — tech.gneill.net</title>
+		<script>
+			// Sets the theme class before first paint so there is no flash.
+			try {
+				var t = localStorage.getItem("projects-theme") === "light" ? "light" : "dark";
+				document.documentElement.classList.toggle("light", t === "light");
+				document.documentElement.dataset.theme = t;
+			} catch (e) {}
+		</script>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/web/main.tsx"></script>
+	</body>
+</html>

@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+.git
+.turbo
+.data
+dist
+**/dist
+dist-electron
+.env
+.env.*
+!.env.template
+*.db
+.expo
+ios
+android

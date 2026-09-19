@@ -1,0 +1,124 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant light (&:is(.light *));
+
+@theme inline {
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--foreground);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root {
+  --background: #0e0f12;
+  --surface: #15171c;
+  --surface-2: #1c1f26;
+  --foreground: #edeef1;
+  --muted-foreground: #8e939e;
+  --border: rgba(255, 255, 255, 0.09);
+  --accent: #ff5c2b;
+  --accent-foreground: #140702;
+  --success: #4ed88c;
+  --destructive: #f2544b;
+  --dot: rgba(255, 255, 255, 0.055);
+  --glow: rgba(255, 92, 43, 0.16);
+}
+
+.light {
+  --background: #faf8f4;
+  --surface: #ffffff;
+  --surface-2: #f1eee8;
+  --foreground: #16171a;
+  --muted-foreground: #5e6167;
+  --border: rgba(0, 0, 0, 0.1);
+  --accent: #d9401a;
+  --accent-foreground: #fff6f2;
+  --success: #157f4d;
+  --destructive: #c3362d;
+  --dot: rgba(0, 0, 0, 0.055);
+  --glow: rgba(217, 64, 26, 0.1);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+    min-height: 100vh;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  input,
+  textarea {
+    @apply bg-surface-2 text-foreground;
+  }
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.page-glow::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -180px;
+  height: 420px;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, var(--glow), transparent 70%);
+  pointer-events: none;
+}
