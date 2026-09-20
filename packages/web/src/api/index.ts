@@ -24,6 +24,37 @@ const app = createApp(router);
 
 app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
+/**
+ * Config check for a deployed instance: which env vars arrived, and whether the
+ * database answers. Reports presence only — never a value that is a secret.
+ */
+app.get("/api/diag", async (c) => {
+  const present = (name: string) => Boolean(process.env[name]?.trim());
+  let database = "ok";
+  try {
+    await db.select().from(schema.projects).limit(1);
+  } catch (error) {
+    database = error instanceof Error ? error.message : "failed";
+  }
+
+  return c.json({
+    websiteUrl: process.env.WEBSITE_URL ?? null,
+    googleRedirectUri: process.env.WEBSITE_URL
+      ? `${process.env.WEBSITE_URL.replace(/\/+$/, "")}/api/auth/callback/google`
+      : null,
+    env: {
+      DATABASE_URL: present("DATABASE_URL"),
+      DATABASE_AUTH_TOKEN: present("DATABASE_AUTH_TOKEN"),
+      BETTER_AUTH_SECRET: present("BETTER_AUTH_SECRET"),
+      GOOGLE_CLIENT_ID: present("GOOGLE_CLIENT_ID"),
+      GOOGLE_CLIENT_SECRET: present("GOOGLE_CLIENT_SECRET"),
+      ADMIN_EMAILS: present("ADMIN_EMAILS"),
+      SHOTS_DIR: process.env.SHOTS_DIR ?? null,
+    },
+    database,
+  });
+});
+
 /** Serves a project's stored screenshot off the instance filesystem. */
 app.get("/api/shot/:id", async (c) => {
   const id = Number(c.req.param("id"));
