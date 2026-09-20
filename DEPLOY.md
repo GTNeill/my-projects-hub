@@ -94,7 +94,22 @@ gives you a CNAME target; add it at your DNS host as a CNAME for `tech`.
 Then set `WEBSITE_URL=https://tech.gneill.net` and confirm the matching
 redirect URI is registered on the Google OAuth client (§4).
 
-## 6. First deploy: re-capture screenshots
+## 6. Checking the config of a running instance
+
+`GET /api/diag` reports which variables actually reached the container, the
+redirect URI it will send to Google, and whether the database answers. It needs
+an admin session — signed out, it 404s — so open it in the browser after signing
+in at `/admin`.
+
+It is the fastest way to diagnose a sign-in failure, because the two things that
+break it are invisible from outside: missing Google credentials, and a database
+that cannot be written to (Better Auth stores the OAuth state row before it
+redirects you to Google, so a dead database fails sign-in with an empty 500).
+
+Watch for `http` vs `https` in `websiteUrl` — the redirect URI has to match the
+Google Console entry exactly, and a scheme mismatch alone is enough to fail.
+
+## 7. First deploy: re-capture screenshots
 
 The volume starts empty while the database still points at screenshot keys from
 this sandbox. Once the site is up, sign in at `/admin` and hit **Refresh** on

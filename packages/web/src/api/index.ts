@@ -4,6 +4,7 @@ import { createApp } from "./__core/app";
 import { ping } from "./routes/ping";
 import { projects } from "./routes/projects";
 import { auth } from "./auth";
+import { adminEmails } from "./middleware/auth";
 import { db } from "./database";
 import * as schema from "./database/schema";
 import { contentTypeFor, readShot } from "./lib/shot-store";
@@ -27,8 +28,18 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 /**
  * Config check for a deployed instance: which env vars arrived, and whether the
  * database answers. Reports presence only — never a value that is a secret.
+ *
+ * Admin session required. Even presence booleans and the database hostname map
+ * out the deployment for anyone who asks, so this is not public.
  */
 app.get("/api/diag", async (c) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  const allowed = adminEmails();
+  const email = session?.user.email?.toLowerCase() ?? "";
+  if (!session || (allowed.length > 0 && !allowed.includes(email))) {
+    return c.json({ error: "Not found" }, 404);
+  }
+
   const present = (name: string) => Boolean(process.env[name]?.trim());
   // Drizzle's top-level message is just the SQL, so walk the cause chain —
   // that is where libsql puts "no such table" vs an auth/URL failure.
