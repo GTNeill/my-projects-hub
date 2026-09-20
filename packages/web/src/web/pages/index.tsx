@@ -1,27 +1,67 @@
+import { useState } from "react";
 import { Link } from "wouter";
-import { Lock, Share2 } from "lucide-react";
+import { Check, Lock, Share2 } from "lucide-react";
 import { useProjects } from "../queries/projects";
 import { ProjectCard } from "../components/project-card";
 import { ThemeToggle } from "../components/theme-toggle";
 import { CopyButton } from "../components/copy-button";
 import { SupportButton } from "../components/support-button";
 
+type ShareState = "idle" | "copied" | "empty";
+
 function Index() {
   const projects = useProjects();
   const items = projects.data ?? [];
+  const [shareState, setShareState] = useState<ShareState>("idle");
 
   const shareAll = async () => {
+    // Without this guard the button silently put an empty string on the
+    // clipboard whenever the list had not loaded yet or the request failed,
+    // so it looked like it worked and the paste came out blank.
+    if (items.length === 0) {
+      setShareState("empty");
+      setTimeout(() => setShareState("idle"), 1800);
+      return;
+    }
+
     const text = items.map((p) => `${p.title} — ${p.url}`).join("\n");
+
     if (navigator.share) {
       try {
-        await navigator.share({ title: "My projects", text });
+        await navigator.share({
+          title: "Things George built",
+          text,
+          url: window.location.origin,
+        });
         return;
       } catch {
-        /* fall through to clipboard */
+        /* share sheet dismissed or unavailable — fall through to clipboard */
       }
     }
-    await navigator.clipboard.writeText(text);
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Same fallback the per-card copy button uses: the async clipboard API
+      // refuses to write when the document is not focused.
+      const area = document.createElement("textarea");
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+    }
+
+    setShareState("copied");
+    setTimeout(() => setShareState("idle"), 1800);
   };
+
+  const shareLabel =
+    shareState === "copied"
+      ? "Copied"
+      : shareState === "empty"
+        ? "Nothing to share"
+        : "Share all";
 
   return (
     <div className="page-glow relative min-h-screen">
@@ -36,10 +76,19 @@ function Index() {
             <button
               type="button"
               onClick={shareAll}
-              className="hidden items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-accent/60 hover:text-foreground sm:inline-flex"
+              title="Copy every project title and link as a list"
+              className={`hidden items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors hover:border-accent/60 hover:text-foreground sm:inline-flex ${
+                shareState === "copied"
+                  ? "text-[color:var(--success)]"
+                  : "text-muted-foreground"
+              }`}
             >
-              <Share2 className="size-3.5" />
-              Share all
+              {shareState === "copied" ? (
+                <Check className="size-3.5" />
+              ) : (
+                <Share2 className="size-3.5" />
+              )}
+              {shareLabel}
             </button>
             <ThemeToggle />
             <Link
