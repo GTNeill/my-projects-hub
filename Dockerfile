@@ -12,14 +12,11 @@ RUN bun install --frozen-lockfile
 COPY . .
 
 # Vite needs the VITE_* values at build time, so they arrive as build args.
+# Auth needs nothing here — the Google client id/secret are read at runtime.
 ARG VITE_REFERRAL_CODE=gtn
 ARG VITE_SUPPORT_URL=https://ko-fi.com/georgeneill
-ARG VITE_RUNABLE_AUTH_ISSUER
-ARG VITE_APPLICATION_ID
 ENV VITE_REFERRAL_CODE=$VITE_REFERRAL_CODE \
-    VITE_SUPPORT_URL=$VITE_SUPPORT_URL \
-    VITE_RUNABLE_AUTH_ISSUER=$VITE_RUNABLE_AUTH_ISSUER \
-    VITE_APPLICATION_ID=$VITE_APPLICATION_ID
+    VITE_SUPPORT_URL=$VITE_SUPPORT_URL
 
 RUN cd packages/web && bunx vite build
 

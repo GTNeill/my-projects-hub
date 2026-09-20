@@ -24,11 +24,12 @@ function Admin() {
 
   const signIn = async () => {
     setError(null);
-    const result = await authClient.managedAuth.signIn({ provider: "google" });
-    if (result.error && result.error.code !== "POPUP_CLOSED") {
-      setError(result.error.message ?? "Sign-in failed");
-    }
-    await me.refetch();
+    // Top-level redirect to Google, returning to /admin signed in.
+    const { error: signInError } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/admin",
+    });
+    if (signInError) setError(signInError.message ?? "Sign-in failed");
   };
 
   const submitDraft = async (event: React.FormEvent) => {
@@ -55,7 +56,10 @@ function Admin() {
             {signedIn ? (
               <button
                 type="button"
-                onClick={() => authClient.signOut()}
+                onClick={async () => {
+                  await authClient.signOut();
+                  await me.refetch();
+                }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-accent/60 hover:text-foreground"
               >
                 <LogOut className="size-3.5" />
