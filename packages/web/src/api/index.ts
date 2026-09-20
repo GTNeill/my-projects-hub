@@ -30,11 +30,30 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
  */
 app.get("/api/diag", async (c) => {
   const present = (name: string) => Boolean(process.env[name]?.trim());
+  // Drizzle's top-level message is just the SQL, so walk the cause chain —
+  // that is where libsql puts "no such table" vs an auth/URL failure.
   let database = "ok";
   try {
     await db.select().from(schema.projects).limit(1);
   } catch (error) {
-    database = error instanceof Error ? error.message : "failed";
+    const chain: string[] = [];
+    let current: unknown = error;
+    while (current instanceof Error && chain.length < 5) {
+      chain.push(current.message);
+      current = current.cause;
+    }
+    database = chain.length ? chain.join(" <- ") : "failed";
+  }
+
+  // Host only: it identifies which Turso database is wired up, and the
+  // credential that must stay secret is the auth token, not the hostname.
+  let databaseHost: string | null = null;
+  try {
+    databaseHost = process.env.DATABASE_URL
+      ? new URL(process.env.DATABASE_URL.replace(/^libsql:/, "https:")).host
+      : null;
+  } catch {
+    databaseHost = "unparseable";
   }
 
   return c.json({
@@ -52,6 +71,7 @@ app.get("/api/diag", async (c) => {
       SHOTS_DIR: process.env.SHOTS_DIR ?? null,
     },
     database,
+    databaseHost,
   });
 });
 
