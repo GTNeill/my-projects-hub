@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { createApp } from "./__core/app";
 import { ping } from "./routes/ping";
 import { projects } from "./routes/projects";
-import { auth } from "./auth";
+import { auth, publicBaseUrl } from "./auth";
 import { adminEmails } from "./middleware/auth";
 import { db } from "./database";
 import * as schema from "./database/schema";
@@ -74,10 +74,15 @@ app.get("/api/diag", async (c) => {
     databaseHost = "unparseable";
   }
 
+  // The derived base URL, not the raw env var: that is what better-auth
+  // actually hands Google, and what the Google Console entry has to match.
+  const resolvedBaseUrl = publicBaseUrl();
+
   return c.json({
     websiteUrl: process.env.WEBSITE_URL ?? null,
-    googleRedirectUri: process.env.WEBSITE_URL
-      ? `${process.env.WEBSITE_URL.replace(/\/+$/, "")}/api/auth/callback/google`
+    resolvedBaseUrl: resolvedBaseUrl ?? null,
+    googleRedirectUri: resolvedBaseUrl
+      ? `${resolvedBaseUrl}/api/auth/callback/google`
       : null,
     env: {
       DATABASE_URL: present("DATABASE_URL"),

@@ -78,10 +78,22 @@ Set up once, in Google Cloud Console → APIs & Services → Credentials:
 3. Put the client ID and secret into `GOOGLE_CLIENT_ID` /
    `GOOGLE_CLIENT_SECRET`, both locally and in Railway.
 
-The redirect URI is always `<WEBSITE_URL>/api/auth/callback/google`, so
-`WEBSITE_URL` and the Google Console entry have to agree exactly — scheme,
-host, no trailing slash. A mismatch shows up as Google's
-`redirect_uri_mismatch` error page instead of the consent screen.
+The redirect URI is always `<WEBSITE_URL>/api/auth/callback/google`, and it has
+to match the Google Console entry exactly — scheme, host, no trailing slash. A
+mismatch shows up as Google's `redirect_uri_mismatch` error page instead of the
+consent screen.
+
+To stop the most common version of that mistake, the app normalises
+`WEBSITE_URL` before handing it to better-auth: a missing scheme or a plain
+`http://` one is upgraded to `https://` for any non-localhost host, and
+trailing slashes are stripped. `localhost` and `127.0.0.1` keep `http`. So the
+production redirect URI is `https://tech.gneill.net/api/auth/callback/google`
+even if the Railway variable says `http://tech.gneill.net` — but set it with
+`https://` anyway, since other things read the variable raw.
+
+`GET /api/diag` reports `resolvedBaseUrl` and `googleRedirectUri`: those are
+the values actually sent to Google, so compare the Console entry against them
+rather than against the env var.
 
 Sessions are first-party cookies now (no bearer tokens), so the API and the
 frontend must be served from the same origin — which they are, one Bun process.
