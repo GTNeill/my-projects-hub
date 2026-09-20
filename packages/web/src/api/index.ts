@@ -7,7 +7,14 @@ import { auth } from "./auth";
 import { adminEmails } from "./middleware/auth";
 import { db } from "./database";
 import * as schema from "./database/schema";
+import { ensureSchema } from "./database/ensure-schema";
 import { contentTypeFor, readShot } from "./lib/shot-store";
+
+// Stand the schema up before serving, so an instance pointed at an empty
+// database works instead of 500ing on every query. Awaited on purpose: it is
+// one round trip at boot, and answering requests against a table-less database
+// only produces errors nobody can act on. Logs which database it reached.
+const schemaState = await ensureSchema();
 
 // API features are oRPC procedures, one file per feature in ./routes/,
 // composed into this router — typed end-to-end via the clients
@@ -83,6 +90,7 @@ app.get("/api/diag", async (c) => {
     },
     database,
     databaseHost,
+    schema: schemaState,
   });
 });
 
