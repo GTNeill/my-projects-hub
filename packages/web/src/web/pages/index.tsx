@@ -7,7 +7,7 @@ import { ThemeToggle } from "../components/theme-toggle";
 import { CopyButton } from "../components/copy-button";
 import { SupportButton } from "../components/support-button";
 
-type ShareState = "idle" | "copied" | "empty";
+type ShareState = "idle" | "copied" | "empty" | "failed";
 
 function Index() {
   const projects = useProjects();
@@ -26,7 +26,18 @@ function Index() {
 
     const text = items.map((p) => `${p.title} — ${p.url}`).join("\n");
 
-    if (navigator.share) {
+    // Only hand off to the OS share sheet on a touch device. Desktop Chrome on
+    // Windows, Edge, and Safari on macOS all expose navigator.share, so testing
+    // for the API alone sent desktop clicks into a share dialog and returned
+    // before anything reached the clipboard — the button did nothing you could
+    // paste. A coarse pointer with no hover is the phone/tablet case, where the
+    // share sheet is genuinely better than a clipboard write.
+    const isTouchDevice =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches &&
+      !window.matchMedia("(hover: hover)").matches;
+
+    if (isTouchDevice && navigator.share) {
       try {
         await navigator.share({
           title: "Things George built",
@@ -39,21 +50,33 @@ function Index() {
       }
     }
 
+    let copied = false;
     try {
       await navigator.clipboard.writeText(text);
+      copied = true;
     } catch {
       // Same fallback the per-card copy button uses: the async clipboard API
-      // refuses to write when the document is not focused.
+      // refuses to write when the document is not focused, and is missing
+      // entirely outside a secure context.
       const area = document.createElement("textarea");
       area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
       document.body.appendChild(area);
       area.select();
-      document.execCommand("copy");
+      try {
+        copied = document.execCommand("copy");
+      } catch {
+        copied = false;
+      }
       area.remove();
     }
 
-    setShareState("copied");
-    setTimeout(() => setShareState("idle"), 1800);
+    // Reporting "Copied" after a failed write is worse than reporting nothing:
+    // it sends you to paste something that was never put there.
+    setShareState(copied ? "copied" : "failed");
+    setTimeout(() => setShareState("idle"), 2400);
   };
 
   const shareLabel =
@@ -61,7 +84,9 @@ function Index() {
       ? "Copied"
       : shareState === "empty"
         ? "Nothing to share"
-        : "Share all";
+        : shareState === "failed"
+          ? "Copy blocked"
+          : "Share all";
 
   return (
     <div className="page-glow relative min-h-screen">

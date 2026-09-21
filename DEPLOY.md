@@ -1,7 +1,8 @@
 # Deploying to Railway
 
 The app is a single Bun service: it serves the built React frontend and the
-Hono/oRPC API from one process (`packages/web/src/__server.ts`).
+Hono/oRPC API from one process (`packages/web/src/server.ts`, which adds
+the static cache headers the template's `__server.ts` omits).
 
 ## 1. Create the service
 

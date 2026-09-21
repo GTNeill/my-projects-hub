@@ -26,4 +26,4 @@ ENV NODE_ENV=production \
 
 EXPOSE 3000
 
-CMD ["bun", "packages/web/src/__server.ts"]
+CMD ["bun", "packages/web/src/server.ts"]
