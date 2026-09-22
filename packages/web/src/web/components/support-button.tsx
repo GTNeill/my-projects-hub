@@ -1,6 +1,6 @@
 /**
- * Ko-fi "Support Us" pill. Rendered natively (no Ko-fi script) so nothing loads
- * over the network and it can be sized to sit inline in the footer.
+ * Ko-fi "Buy me a Coffee" pill. Rendered natively (no Ko-fi script) so nothing
+ * loads over the network and it can be sized to sit inline in the footer.
  * Target comes from VITE_SUPPORT_URL, defaulting to ko-fi.com/georgeneill.
  */
 export function SupportButton() {
@@ -14,7 +14,7 @@ export function SupportButton() {
       className="inline-flex items-center gap-1.5 rounded-full bg-[#323842] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white opacity-50 transition-all hover:-translate-y-px hover:opacity-100"
     >
       <CupIcon />
-      Support Us
+      Buy me a Coffee
     </a>
   );
 }
