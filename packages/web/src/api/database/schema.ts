@@ -32,3 +32,24 @@ export const projects = sqliteTable("projects", {
 });
 
 export type Project = typeof projects.$inferSelect;
+
+/**
+ * Copy for the About card behind the "Built by George Neill" byline.
+ *
+ * One row, always id 1. A missing row means "nothing has been edited yet", and
+ * the API answers with the defaults in ../lib/about.ts instead.
+ */
+export const aboutCard = sqliteTable("about_card", {
+  id: integer("id").primaryKey(),
+  /** Card title, shown above the bio. */
+  heading: text("heading").notNull().default(""),
+  /** The bio as written in the admin textarea: paragraphs split by a blank line. */
+  bio: text("bio").notNull().default(""),
+  /** Empty hides the LinkedIn pill. */
+  linkedinUrl: text("linkedin_url").notNull().default(""),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+
+export type AboutCardRow = typeof aboutCard.$inferSelect;

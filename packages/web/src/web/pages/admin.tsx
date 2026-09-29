@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ArrowLeft, Camera, LogOut, Plus } from "lucide-react";
 import { authClient } from "../lib/auth";
 import { useAllProjects, useCaptureMissing, useCreateProject, useMe } from "../queries/projects";
+import { AboutEditor } from "../components/about-editor";
 import { ProjectEditor } from "../components/project-editor";
 import { ThemeToggle } from "../components/theme-toggle";
 
@@ -178,7 +179,9 @@ function Admin() {
               </form>
             ) : null}
 
-            <div className="mt-6 space-y-4">
+            <AboutEditor />
+
+            <div className="mt-8 space-y-4">
               {projects.data?.map((project) => (
                 <ProjectEditor key={project.id} project={project} />
               ))}

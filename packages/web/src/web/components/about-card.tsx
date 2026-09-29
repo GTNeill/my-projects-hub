@@ -1,20 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { SupportButton } from "./support-button";
-
-/**
- * The bio shown in the About card, one paragraph per entry.
- *
- * Kept as data rather than inline JSX so the copy is editable in one place
- * without touching layout.
- */
-const BIO = [
-  "I'm a retired IT guy with over 45 years doing IT stuff as a small business for small businesses, banks, pharmacies, shipyards, doctors, credit unions, libraries, and more. I also spent years on the IT team for a Fortune 50 grocery distributor, developing RF warehouse apps, frequent shopper tracking, activity-based costing, and warehouse labor reporting — and served as IT Director for the largest organic farmer cooperative in the country.",
-  "I'm passionate about social justice and enjoy volunteering in my community, helping nonprofits maximize their use of technology by providing support, implementing systems, and developing tools that connect people and make life easier.",
-  "I'm also a decent amateur photographer and love taking photos of family and friends and traveling around the world.",
-];
-
-const LINKEDIN_URL = "https://linkedin.com/in/georgeneill";
+import { useAbout } from "../queries/about";
 
 /**
  * "Built by George Neill", where the name opens a card with his bio, the Ko-fi
@@ -27,6 +14,10 @@ const LINKEDIN_URL = "https://linkedin.com/in/georgeneill";
  */
 export function AboutCard() {
   const [open, setOpen] = useState(false);
+  // The copy lives in the database and is edited from /admin. Fetched on mount
+  // rather than on open, so the text is already in hand by the time the card
+  // is clicked.
+  const about = useAbout();
   const cardRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const cardId = useId();
@@ -97,28 +88,35 @@ export function AboutCard() {
           </button>
 
           <h2 id={`${cardId}-title`} className="label-mono pr-8">
-            George Neill
+            {about.data?.heading ?? "George Neill"}
           </h2>
 
           <div className="mt-3 space-y-3 text-sm leading-relaxed text-muted-foreground">
-            {BIO.map((paragraph) => (
-              <p key={paragraph.slice(0, 32)}>{paragraph}</p>
-            ))}
+            {about.data ? (
+              about.data.paragraphs.map((paragraph) => (
+                <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+              ))
+            ) : (
+              <p>{about.isError ? "The bio could not be loaded." : "Loading…"}</p>
+            )}
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-border pt-4">
             <SupportButton className="opacity-100" />
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="George Neill on LinkedIn"
-              title="LinkedIn"
-              className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-accent/60 hover:text-foreground"
-            >
-              <LinkedInIcon />
-              LinkedIn
-            </a>
+            {/* Blank LinkedIn URL in the admin console hides the pill. */}
+            {about.data?.linkedinUrl ? (
+              <a
+                href={about.data.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${about.data.heading} on LinkedIn`}
+                title="LinkedIn"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-accent/60 hover:text-foreground"
+              >
+                <LinkedInIcon />
+                LinkedIn
+              </a>
+            ) : null}
           </div>
         </section>
       ) : null}

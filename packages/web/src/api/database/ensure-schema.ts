@@ -39,6 +39,13 @@ const STATEMENTS = [
     created_at integer NOT NULL,
     updated_at integer NOT NULL
   )`,
+  `CREATE TABLE IF NOT EXISTS about_card (
+    id integer PRIMARY KEY NOT NULL,
+    heading text DEFAULT '' NOT NULL,
+    bio text DEFAULT '' NOT NULL,
+    linkedin_url text DEFAULT '' NOT NULL,
+    updated_at integer NOT NULL
+  )`,
   `CREATE TABLE IF NOT EXISTS user (
     id text PRIMARY KEY NOT NULL,
     name text NOT NULL,

@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { createApp } from "./__core/app";
 import { ping } from "./routes/ping";
 import { projects } from "./routes/projects";
+import { about } from "./routes/about";
 import { auth, publicBaseUrl } from "./auth";
 import { adminEmails } from "./middleware/auth";
 import { db } from "./database";
@@ -22,6 +23,7 @@ const schemaState = await ensureSchema();
 export const router = {
   ping,
   projects,
+  about,
 };
 
 export type AppRouter = typeof router;
