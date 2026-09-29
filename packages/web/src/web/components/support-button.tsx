@@ -2,8 +2,11 @@
  * Ko-fi "Buy me a Coffee" pill. Rendered natively (no Ko-fi script) so nothing
  * loads over the network and it can be sized to sit inline in the footer.
  * Target comes from VITE_SUPPORT_URL, defaulting to ko-fi.com/georgeneill.
+ *
+ * `className` is appended last so a caller can override the dimmed footer
+ * treatment — inside the About card it sits at full opacity.
  */
-export function SupportButton() {
+export function SupportButton({ className = "" }: { className?: string }) {
   const url = import.meta.env.VITE_SUPPORT_URL || "https://ko-fi.com/georgeneill";
 
   return (
@@ -11,7 +14,7 @@ export function SupportButton() {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 rounded-full bg-[#323842] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white opacity-50 transition-all hover:-translate-y-px hover:opacity-100"
+      className={`inline-flex items-center gap-1.5 rounded-full bg-[#323842] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white opacity-50 transition-all hover:-translate-y-px hover:opacity-100 ${className}`}
     >
       <CupIcon />
       Buy me a Coffee

@@ -98,6 +98,28 @@
   color: var(--muted-foreground);
 }
 
+/* About card entrance — short and subtle, and skipped for reduced motion. */
+@keyframes about-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.about-card {
+  animation: about-card-in 160ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-card {
+    animation: none;
+  }
+}
+
 @keyframes rise {
   from {
     opacity: 0;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Check, Lock, Share2 } from "lucide-react";
 import { useProjects } from "../queries/projects";
+import { AboutCard } from "../components/about-card";
 import { ProjectCard } from "../components/project-card";
 import { ThemeToggle } from "../components/theme-toggle";
 import { CopyButton } from "../components/copy-button";
@@ -128,8 +129,12 @@ function Index() {
       </header>
 
       <main className="mx-auto max-w-6xl px-5 pb-24">
-        <section className="rise py-14 md:py-20">
-          <p className="label-mono">Built by George Neill</p>
+        {/* relative z-20: the `rise` animation leaves a transform on this
+            section, which makes it a stacking context and traps the About
+            card's z-index inside it — without this the card opens *behind*
+            the project grid below. */}
+        <section className="rise relative z-20 py-14 md:py-20">
+          <AboutCard />
           <h1 className="mt-4 max-w-3xl font-display text-4xl leading-[1.05] font-bold tracking-tight md:text-6xl">
             Things I&apos;ve built, and where to find them.
           </h1>
