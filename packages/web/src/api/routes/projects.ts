@@ -109,8 +109,10 @@ export const projects = {
       }),
     )
     .handler(async ({ input }) => {
-      const [{ max }] = await db
-        .select({ max: sql<number>`coalesce(max(${schema.projects.sortOrder}), 0)` })
+      // Lists sort ascending: give each new project a slot before the first.
+      // Include hidden projects so the admin list uses the same ordering.
+      const [{ min }] = await db
+        .select({ min: sql<number>`coalesce(min(${schema.projects.sortOrder}), 0)` })
         .from(schema.projects);
       const [row] = await db
         .insert(schema.projects)
@@ -120,7 +122,7 @@ export const projects = {
           tagline: input.tagline.trim(),
           description: input.description.trim(),
           hidden: input.hidden,
-          sortOrder: (max ?? 0) + 10,
+          sortOrder: (min ?? 0) - 10,
         })
         .returning();
       void refreshShot(row);
