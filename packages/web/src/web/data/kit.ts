@@ -426,6 +426,84 @@ export const background = {
   },
 };
 
+/**
+ * The commercial stack, listed because a media kit is where people check
+ * whether you have actually used the thing they are asking about.
+ *
+ * Names are spelled the way the vendors spell them. A handful below were given
+ * in a shortened or misspelled form and kept close to the original — check
+ * "Sent", "Chatto", "GenOffice" and "Zoner Studio" before this goes out.
+ */
+export const systems = {
+  kicker: "Systems I've worked with",
+  standfirst:
+    "The commercial tools I've implemented, administered or integrated over the years. It is also how I can tell you honestly when something simpler will do the job — and when nothing off the shelf will.",
+  groups: [
+    { label: "CRM", tools: ["Little Green Light", "Salesforce", "Infor CRM"] },
+    { label: "Donor systems", tools: ["Givebutter", "Zeffy", "Facebook"] },
+    {
+      label: "Project management",
+      tools: ["Asana", "MS Project", "Monday", "Basecamp", "Workamajig", "ClickUp", "Clockify"],
+    },
+    { label: "Communication", tools: ["MS Teams", "Mattermost", "WhatsApp", "Chatto"] },
+    {
+      label: "Office suites",
+      tools: [
+        "MS Office",
+        "OpenOffice",
+        "GenOffice",
+        "LibreOffice",
+        "Google Workspace for Nonprofits",
+      ],
+    },
+    {
+      label: "Photography",
+      tools: ["Adobe Creative Suite", "ON1", "Topaz Suite", "Capture One", "Zoner Studio"],
+    },
+    { label: "Design", tools: ["Canva", "Plasfy", "Excalidraw"] },
+    {
+      label: "Web tools",
+      tools: [
+        "WordPress",
+        "Squarespace",
+        "Zenfolio",
+        "MS SharePoint",
+        "Bootstrap Studio",
+        "Cloudflare",
+        "AWS",
+        "GoDaddy",
+        "Bluehost",
+        "Railway",
+        "Hostinger",
+        "Vercel",
+        "RackNerd",
+        "Short.io",
+      ],
+    },
+    {
+      label: "Dev tools",
+      tools: [
+        "GitHub",
+        "Docker",
+        "Resend",
+        "Sent",
+        "Turso DB",
+        "Supabase",
+        "Tigris",
+        "Greptile",
+        "Perplexity",
+        "Claude",
+        "OpenCode",
+        "Telnyx",
+        "MySQL",
+        "PostgreSQL",
+        "MS SQL Server",
+        "SQLite",
+      ],
+    },
+  ],
+};
+
 export const builder = {
   kicker: "07 — Start here",
   title: "Tell me what you need. I'll write the email for you.",

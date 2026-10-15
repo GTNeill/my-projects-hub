@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { background, profile } from "../../data/kit";
+import { background, profile, systems } from "../../data/kit";
 import { Arrow, Ext, Kicker, Reveal } from "./primitives";
 
 /**
@@ -148,6 +148,41 @@ export function Background() {
                 </p>
               ))}
             </div>
+          </div>
+        </Reveal>
+
+        {/* Reference material, so it closes the section rather than breaking
+            up the narrative above it. */}
+        <Reveal delay={60}>
+          <div className="hairline mt-16 pt-14">
+            <Kicker>{systems.kicker}</Kicker>
+            <p className="lede mt-5 max-w-[64ch]">{systems.standfirst}</p>
+
+            <dl className="mt-12 grid gap-x-16 lg:grid-cols-2">
+              {systems.groups.map((g) => (
+                <div key={g.label} className="hairline grid gap-2 py-4 sm:grid-cols-[minmax(0,10rem)_1fr] sm:gap-8">
+                  <dt className="label !text-[10px] !tracking-[0.12em] !text-[var(--foreground)]">
+                    {g.label}
+                  </dt>
+                  {/* flex-wrap, not inline spans: two adjacent inline boxes with
+                      no whitespace between them offer no wrap point, so the
+                      whole row measured as its own min-content and pushed the
+                      page 845px wide on a phone. */}
+                  <dd className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[0.93rem] leading-[1.65] text-[var(--muted-foreground)]">
+                    {g.tools.map((tool, j) => (
+                      <span key={tool} className="inline-flex items-baseline gap-2.5 whitespace-nowrap">
+                        {j > 0 ? (
+                          <span aria-hidden="true" className="opacity-40">
+                            ·
+                          </span>
+                        ) : null}
+                        {tool}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </Reveal>
       </div>
