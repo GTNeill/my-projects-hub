@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Camera, LogOut, Plus } from "lucide-react";
+import { ArrowLeft, Calendar, Camera, LogOut, Plus } from "lucide-react";
 import { authClient } from "../lib/auth";
+import { profile } from "../data/kit";
 import { useAllProjects, useCaptureMissing, useCreateProject, useMe } from "../queries/projects";
 import { AboutEditor } from "../components/about-editor";
 import { ProjectEditor } from "../components/project-editor";
@@ -53,6 +54,15 @@ function Admin() {
             back to site
           </Link>
           <div className="flex items-center gap-2">
+            <a
+              href={profile.bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-accent/60 hover:text-foreground"
+            >
+              <Calendar className="size-3.5" />
+              TidyCal
+            </a>
             <ThemeToggle />
             {signedIn ? (
               <button
