@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowLeft, Calendar, Camera, LogOut, Plus } from "lucide-react";
 import { authClient } from "../lib/auth";
-import { profile } from "../data/kit";
+import { useBookingUrl } from "../queries/settings";
+import { SettingsEditor } from "../components/settings-editor";
 import { useAllProjects, useCaptureMissing, useCreateProject, useMe } from "../queries/projects";
 import { AboutEditor } from "../components/about-editor";
 import { ProjectEditor } from "../components/project-editor";
@@ -12,6 +13,7 @@ const field =
   "w-full rounded-md border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/60";
 
 function Admin() {
+  const bookingUrl = useBookingUrl();
   const session = authClient.useSession();
   const me = useMe();
   const signedIn = Boolean(session.data);
@@ -55,7 +57,7 @@ function Admin() {
           </Link>
           <div className="flex items-center gap-2">
             <a
-              href={profile.bookingUrl}
+              href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-accent/60 hover:text-foreground"
@@ -189,6 +191,7 @@ function Admin() {
               </form>
             ) : null}
 
+            <SettingsEditor />
             <AboutEditor />
 
             <div className="mt-8 space-y-4">

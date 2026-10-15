@@ -22,6 +22,10 @@ import { db } from "./__client";
  * it must be regenerated (`drizzle-kit generate`) whenever those change.
  */
 const STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS site_settings (
+    id integer PRIMARY KEY NOT NULL,
+    tidycal_url text NOT NULL
+  )`,
   `CREATE TABLE IF NOT EXISTS projects (
     id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
     title text NOT NULL,

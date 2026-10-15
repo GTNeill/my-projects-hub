@@ -1,6 +1,7 @@
+import { useBookingUrl } from "../../queries/settings";
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { nav, profile } from "../../data/kit";
+import { nav } from "../../data/kit";
 import { applyTheme, storedTheme, type Theme } from "../../lib/theme";
 import { useScrollSpy } from "../../hooks/use-reveal";
 import { Wordmark } from "./primitives";
@@ -24,6 +25,7 @@ function useSiteTheme() {
 }
 
 export function SiteNav() {
+  const bookingUrl = useBookingUrl();
   const { theme, toggle } = useSiteTheme();
   const [scrolled, setScrolled] = useState(false);
   useScrollSpy(NAV_IDS);
@@ -100,7 +102,7 @@ export function SiteNav() {
             )}
           </button>
           <a
-            href={profile.bookingUrl}
+            href={bookingUrl}
             target="_blank"
             rel="noreferrer noopener"
             className="btn btn-primary !px-4 !py-2.5 !text-[11px]"

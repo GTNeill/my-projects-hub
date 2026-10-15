@@ -1,7 +1,9 @@
+import { useBookingUrl } from "../../queries/settings";
 import { nav, profile } from "../../data/kit";
 import { Ext, Reveal, Wordmark } from "./primitives";
 
 export function Footer() {
+  const bookingUrl = useBookingUrl();
   return (
     <footer className="hairline mt-4 py-14">
       <div className="mx-auto max-w-[1240px] px-6 md:px-10">
@@ -39,7 +41,7 @@ export function Footer() {
               <ul className="mt-4 flex flex-col gap-2.5">
                 <li>
                   <Ext
-                    href={profile.bookingUrl}
+                    href={bookingUrl}
                     printUrl
                     className="text-[0.93rem] text-[var(--muted-foreground)] transition-colors hover:text-[var(--accent)]"
                   >

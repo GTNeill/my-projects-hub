@@ -1,8 +1,9 @@
+import { useBookingUrl } from "../../queries/settings";
 import { useMemo, useState } from "react";
 import { builder, profile, start } from "../../data/kit";
 import { Arrow, Ext, Kicker, Reveal } from "./primitives";
 
-function buildMessage(org: string, picked: string[], notes: string) {
+function buildMessage(org: string, picked: string[], notes: string, bookingUrl: string) {
   const orgName = org.trim() || "[your organization]";
   const subject = picked.length
     ? `Project inquiry — ${orgName}: ${picked.length} thing${picked.length > 1 ? "s" : ""}`
@@ -32,7 +33,7 @@ function buildMessage(org: string, picked: string[], notes: string) {
     ``,
     `We're a [type of organization], roughly [number] people.`,
     ``,
-    `Happy to do a 30-minute call — whatever's easiest: ${profile.bookingUrl}`,
+    `Happy to do a 30-minute call — whatever's easiest: ${bookingUrl}`,
     ``,
     `Thanks,`,
     `[your name]`,
@@ -42,12 +43,13 @@ function buildMessage(org: string, picked: string[], notes: string) {
 }
 
 export function Start() {
+  const bookingUrl = useBookingUrl();
   const [org, setOrg] = useState("");
   const [picked, setPicked] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const { subject, body } = useMemo(() => buildMessage(org, picked, notes), [org, picked, notes]);
+  const { subject, body } = useMemo(() => buildMessage(org, picked, notes, bookingUrl), [org, picked, notes, bookingUrl]);
 
   const toggle = (label: string) =>
     setPicked((prev) => (prev.includes(label) ? prev.filter((p) => p !== label) : [...prev, label]));
@@ -171,14 +173,14 @@ export function Start() {
 
             <div className="mt-6 grid gap-px border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2">
               <Ext
-                href={profile.bookingUrl}
+                href={bookingUrl}
                 printUrl
                 className="group bg-[var(--surface)] p-6 transition-colors hover:bg-[var(--surface-2)]"
               >
                 <span className="label">Fastest</span>
                 <span className="display-md mt-3 block !text-[1.05rem]">{profile.bookingLabel}</span>
                 <span className="label mt-2 block !text-[10px] !tracking-[0.1em]">
-                  tidycal.com/gneill
+                  {bookingUrl.replace(/^https:\/\//, "")}
                 </span>
               </Ext>
               <Ext

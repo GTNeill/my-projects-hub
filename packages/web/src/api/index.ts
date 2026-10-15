@@ -4,6 +4,7 @@ import { createApp } from "./__core/app";
 import { ping } from "./routes/ping";
 import { projects } from "./routes/projects";
 import { about } from "./routes/about";
+import { settings } from "./routes/settings";
 import { auth, publicBaseUrl } from "./auth";
 import { adminEmails } from "./middleware/auth";
 import { db } from "./database";
@@ -24,6 +25,7 @@ export const router = {
   ping,
   projects,
   about,
+  settings,
 };
 
 export type AppRouter = typeof router;

@@ -1,7 +1,9 @@
+import { useBookingUrl } from "../../queries/settings";
 import { packages, profile } from "../../data/kit";
 import { Arrow, Ext, Kicker, Reveal } from "./primitives";
 
 export function Packages() {
+  const bookingUrl = useBookingUrl();
   return (
     <section id="packages" className="hairline py-20 md:py-28">
       <div className="mx-auto max-w-[1240px] px-6 md:px-10">
@@ -52,7 +54,7 @@ export function Packages() {
                 {packages.note.detail}
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
-                <Ext href={profile.bookingUrl} printUrl className="btn btn-primary">
+                <Ext href={bookingUrl} printUrl className="btn btn-primary">
                   {profile.bookingLabel} <Arrow />
                 </Ext>
                 <Ext href={`mailto:${profile.email}`} className="btn btn-ghost">

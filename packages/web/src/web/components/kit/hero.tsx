@@ -1,3 +1,4 @@
+import { useBookingUrl } from "../../queries/settings";
 import { hero, profile } from "../../data/kit";
 import { Arrow, Ext, Kicker, Reveal, Wordmark } from "./primitives";
 
@@ -9,6 +10,7 @@ const liveNow = [
 ];
 
 export function Hero() {
+  const bookingUrl = useBookingUrl();
   return (
     <section id="top" className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28">
       <div
@@ -41,7 +43,7 @@ export function Hero() {
 
           <Reveal delay={220}>
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Ext href={profile.bookingUrl} className="btn btn-primary">
+              <Ext href={bookingUrl} className="btn btn-primary">
                 {profile.bookingLabel} <Arrow />
               </Ext>
               <Ext href={`mailto:${profile.email}`} className="btn btn-ghost">

@@ -1,3 +1,4 @@
+import { Wordmark } from "../components/kit/primitives";
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Check, Lock, Share2 } from "lucide-react";
@@ -99,7 +100,7 @@ function Index() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <Link href="/" className="inline-flex items-center gap-2.5 font-mono text-sm tracking-tight">
             <img src="/logo.svg" alt="" width={32} height={32} className="size-8 shrink-0" />
-            <span className="font-medium">Tech by George</span>
+            <Wordmark size="1.25rem" />
           </Link>
           <div className="flex items-center gap-2">
             <Link href="/how-i-can-help" className={`${HELP_BUTTON} hidden sm:inline-flex`}>

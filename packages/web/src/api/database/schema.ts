@@ -53,3 +53,9 @@ export const aboutCard = sqliteTable("about_card", {
 });
 
 export type AboutCardRow = typeof aboutCard.$inferSelect;
+
+/** Site-wide links managed from the admin console. */
+export const siteSettings = sqliteTable("site_settings", {
+  id: integer("id").primaryKey(),
+  tidycalUrl: text("tidycal_url").notNull(),
+});
