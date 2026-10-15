@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Check, Lock, Share2 } from "lucide-react";
+import { ArrowRight, Check, Lock, Share2 } from "lucide-react";
 import { useProjects } from "../queries/projects";
 import { AboutCard } from "../components/about-card";
 import { ProjectCard } from "../components/project-card";
@@ -9,6 +9,10 @@ import { CopyButton } from "../components/copy-button";
 import { SupportButton } from "../components/support-button";
 
 type ShareState = "idle" | "copied" | "empty" | "failed";
+
+/** The one call to action on this page: the media kit at /how-i-can-help. */
+const HELP_BUTTON =
+  "items-center gap-1.5 whitespace-nowrap rounded-full bg-accent px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-accent-foreground transition-opacity hover:opacity-90";
 
 function Index() {
   const projects = useProjects();
@@ -102,6 +106,10 @@ function Index() {
             </span>
           </Link>
           <div className="flex items-center gap-2">
+            <Link href="/how-i-can-help" className={`${HELP_BUTTON} hidden sm:inline-flex`}>
+              How I can help you
+              <ArrowRight className="size-3.5" />
+            </Link>
             <button
               type="button"
               onClick={shareAll}
@@ -128,6 +136,14 @@ function Index() {
               <Lock className="size-4" />
             </Link>
           </div>
+        </div>
+        {/* On a phone the header row is already full, so the CTA gets its own
+            line rather than wrapping "How I can help you" onto two lines. */}
+        <div className="mx-auto max-w-6xl px-5 pb-3 sm:hidden">
+          <Link href="/how-i-can-help" className={`${HELP_BUTTON} flex w-full justify-center`}>
+            How I can help you
+            <ArrowRight className="size-3.5" />
+          </Link>
         </div>
       </header>
 

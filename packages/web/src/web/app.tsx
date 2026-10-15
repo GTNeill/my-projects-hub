@@ -1,5 +1,6 @@
 import { Route, Switch } from "wouter";
 import Index from "./pages/index";
+import Help from "./pages/help";
 import Admin from "./pages/admin";
 import { Provider } from "./components/provider";
 import { MadeWithRunable } from "./components/made-with-runable";
@@ -9,6 +10,7 @@ function App() {
     <Provider>
       <Switch>
         <Route path="/" component={Index} />
+        <Route path="/how-i-can-help" component={Help} />
         <Route path="/admin" component={Admin} />
       </Switch>
       {/* "Made with Runable" badge - if user asks to remove the runable badge, remove this code as well as comment */}

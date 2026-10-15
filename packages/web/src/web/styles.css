@@ -45,6 +45,10 @@
   --destructive: #f2544b;
   --dot: rgba(255, 255, 255, 0.055);
   --glow: rgba(255, 92, 43, 0.16);
+  /* Used by the /how-i-can-help page — hairlines, mono labels, square corners. */
+  --radius: 0.25rem;
+  --rule: #ffffff12;
+  --mono-label: #8e939e;
 }
 
 .light {
@@ -67,6 +71,8 @@
     @apply border-border;
   }
   html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
   }
   body {
@@ -143,4 +149,211 @@
   height: 420px;
   background: radial-gradient(ellipse 60% 100% at 50% 0%, var(--glow), transparent 70%);
   pointer-events: none;
+}
+
+/* ==========================================================================
+   /how-i-can-help — the media kit page
+   Ported from the standalone kit. Every class below is used only by the
+   components in src/web/components/kit/, so it does not touch the projects
+   page or /admin.
+   ========================================================================== */
+
+@layer components {
+  .kit {
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  /* ---------- type ---------- */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+  }
+  .display-xl {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-size: clamp(2.15rem, 4.4vw, 3.55rem);
+  }
+  .display-lg {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.03;
+    font-size: clamp(1.85rem, 3.9vw, 3rem);
+  }
+  .display-md {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mono-label);
+  }
+  .label-accent {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .lede {
+    font-size: clamp(1.02rem, 1.35vw, 1.22rem);
+    line-height: 1.62;
+    color: var(--muted-foreground);
+  }
+  .hairline {
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ---------- controls ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.95rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    transition:
+      transform 0.16s ease,
+      background-color 0.16s ease,
+      border-color 0.16s ease,
+      color 0.16s ease;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  .btn-primary:hover {
+    background: #ff7043;
+  }
+  .btn-ghost {
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.42rem 0.72rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted-foreground);
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .link-underline {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  .link-underline:hover {
+    text-decoration-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .grain {
+    background-image: radial-gradient(circle at 1px 1px, var(--rule) 1px, transparent 0);
+    background-size: 4px 4px;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn:hover {
+    transform: none;
+  }
+}
+
+@media print {
+  :root,
+  .light {
+    --background: #fff;
+    --surface: #fff;
+    --surface-2: #fff;
+    --foreground: #111;
+    --muted-foreground: #444;
+    --border: #ccc;
+    --rule: #ddd;
+    --mono-label: #555;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  section {
+    break-inside: avoid;
+  }
+  a[data-print-url]::after {
+    content: " (" attr(href) ")";
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #666;
+  }
 }
