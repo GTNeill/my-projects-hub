@@ -99,11 +99,7 @@ function Index() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <Link href="/" className="inline-flex items-center gap-2.5 font-mono text-sm tracking-tight">
             <img src="/logo.svg" alt="" width={32} height={32} className="size-8 shrink-0" />
-            <span>
-            <span className="text-muted-foreground">tech.</span>
-            <span className="font-medium">gneill</span>
-            <span className="text-muted-foreground">.net</span>
-            </span>
+            <span className="font-medium">Tech by George</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link href="/how-i-can-help" className={`${HELP_BUTTON} hidden sm:inline-flex`}>
