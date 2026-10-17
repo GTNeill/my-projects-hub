@@ -72,7 +72,7 @@ export const stats = {
   },
   items: [
     {
-      figure: "13",
+      figure: "14",
       label: "Tools shipped",
       detail: "In production, on real domains, used by real people. Not a portfolio of mockups.",
     },
@@ -224,6 +224,15 @@ export const shelf = {
       urlLabel: "grolot.thegreaterrockwell.org",
       tag: "Community",
       shot: "/shots/grolot.jpg",
+    },
+    {
+      name: "Our Election",
+      blurb:
+        "Free online elections for clubs, boards and communities. Private ballots, ranked choice built in, and a round-by-round count anyone can follow.",
+      url: "https://ourelection.app",
+      urlLabel: "ourelection.app",
+      tag: "Civic",
+      shot: "/shots/ourelection.jpg",
     },
     {
       name: "Ranked Choice Voting Live",
