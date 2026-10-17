@@ -1,16 +1,15 @@
+import { Link } from "wouter";
+import { useProjects } from "../../queries/projects";
 import { useBookingUrl } from "../../queries/settings";
 import { hero, profile } from "../../data/kit";
 import { Arrow, Ext, Kicker, Reveal, Wordmark } from "./primitives";
 
-const liveNow = [
-  { name: "Community Bulletin Boards", url: "https://boards.gneill.net" },
-  { name: "Library of Things", url: "https://grolot.thegreaterrockwell.org" },
-  { name: "Street Sweeper Schedule", url: "https://chistreetsweeper.date" },
-  { name: "Volunteer Shift Sign-Up", url: "https://shifts.gneill.net" },
-];
-
 export function Hero() {
   const bookingUrl = useBookingUrl();
+  const projects = useProjects();
+  const items = projects.data ?? [];
+  const liveNow = items.slice(0, 4);
+  const remaining = Math.max(items.length - liveNow.length, 0);
   return (
     <section id="top" className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28">
       <div
@@ -86,16 +85,19 @@ export function Hero() {
                 <span className="label !text-[var(--accent)]">In production</span>
               </span>
             </div>
+            {projects.isPending ? <p className="px-5 py-4 text-sm text-muted-foreground">Loading projects…</p> : null}
+            {projects.isError ? <p className="px-5 py-4 text-sm text-muted-foreground">Projects could not be loaded.</p> : null}
+            {projects.isSuccess && items.length === 0 ? <p className="px-5 py-4 text-sm text-muted-foreground">No public projects yet.</p> : null}
             <ul>
               {liveNow.map((t, i) => (
-                <li key={t.name} className={i > 0 ? "border-t border-[var(--border)]" : ""}>
+                <li key={t.id} className={i > 0 ? "border-t border-[var(--border)]" : ""}>
                   <Ext
                     href={t.url}
                     printUrl
                     className="group flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-[var(--surface-2)]"
                   >
                     <span>
-                      <span className="display-md block !text-[1.02rem]">{t.name}</span>
+                      <span className="display-md block !text-[1.02rem]">{t.title}</span>
                       <span className="label mt-1 block !text-[10px] !tracking-[0.1em]">
                         {t.url.replace("https://", "")}
                       </span>
@@ -107,10 +109,10 @@ export function Hero() {
             </ul>
             <div className="border-t border-[var(--border)] px-5 py-4">
               <p className="label !leading-[1.9]">
-                Nine more on the shelf —{" "}
-                <a href="#shelf" className="text-[var(--foreground)] hover:text-[var(--accent)]">
-                  see all 13
-                </a>
+                {remaining > 0 ? `${remaining} more projects — ` : ""}
+                <Link href="/" className="text-[var(--foreground)] hover:text-[var(--accent)]">
+                  {projects.isSuccess ? `see all ${items.length}` : "see all projects"}
+                </Link>
               </p>
             </div>
           </div>
