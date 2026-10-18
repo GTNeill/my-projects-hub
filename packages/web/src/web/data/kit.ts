@@ -77,10 +77,10 @@ export const stats = {
       detail: "In production, on real domains, used by real people. Not a portfolio of mockups.",
     },
     {
-      figure: "4",
+      figure: "3",
       label: "Organizations running them",
       detail:
-        "The Greater Rockwell Organization, the 40th Ward office, Pine Hollow Neighborhood, and a citywide civic project.",
+        "The Greater Rockwell Organization, the 40th Ward office, and a citywide civic project.",
     },
     {
       figure: "138",
@@ -414,6 +414,7 @@ export const background = {
   ],
   paras: [
     "The range has been wide. Small businesses getting their first computers. Years inside a Fortune 50 company. A farmer cooperative built on trust and slim margins. Websites, donor systems and integrations for nonprofits of every size. Now community tools on Chicago's North Side. Different worlds — and the same thread through all of them: people trying to hold something together with fewer hands and fewer hours than the job actually needs.",
+    "I served on the board of Defense of Democracy, a national nonprofit, and helped the organization implement Google Workspace and integrate donation data from Givebutter into Little Green Light.",
     "That's as true of a nonprofit as it is of a block club. So I build for the situation that actually exists. Nothing I hand over comes with a renewal your volunteers have to remember, a dashboard nobody logs into, or a training session you have to schedule. It should be run by the person who already answers your email, on a phone, in the five minutes they have.",
     "I'm also a photographer, which is where the design sense comes from — an eye for what people actually look at, and for treating the people in front of you as the point rather than the decoration.",
   ],
